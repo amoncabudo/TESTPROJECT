@@ -13,7 +13,7 @@ services:
   mysql:
     #Mapeig de ports
     ports:
-      - "3306:3306"
+      - "3307:3306"
     #Construeix la imatge del contenidor segons el Dockerfile que hi ha a mysql
     build:
       context: .
