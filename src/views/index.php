@@ -20,7 +20,7 @@
         <div class="table-responsive mt-4 rounded">
             <table class="table table-striped">
                 <thead class="table-light">
-                    <tr>
+                    <tr style="text-align: center;">
                         <th scope="col"><i class="bi bi-music-note"></i> NAME</th>
                         <th scope="col"><i class="bi bi-person"></i> ARTIST</th>
                         <th scope="col"><i class="bi bi-clock"></i> DURATION</th>
@@ -32,10 +32,10 @@
                     <?php foreach ($songs as $song): ?>
                         <!-- id_song | song_name | artist | duration | song_path -->
                         <tbody>
-                            <tr data-song-id="<?= $song['id_song'] ?>">
-                                <td class="m-4"><i class="bi bi-music-note-beamed"></i> <?= $song['song_name'] ?></td>
-                                <td><i class="bi bi-person-circle"> <?= $song['artist'] ?></i></td>
-                                <td id="durationBtn"><i class="bi bi-clock"></i> <span class="duration"></span></td>
+                            <tr data-song-id="<?= $song['id_song'] ?>" style="align-items: center; text-align: center;">
+                                <td><?= $song['song_name'] ?></td>
+                                <td><?= $song['artist'] ?></td>
+                                <td id="durationBtn"> <span class="duration"></span></td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center justify-content-start gap-2 p-2 w-100">
                                         <!-- Contenedor del reproductor de audio -->

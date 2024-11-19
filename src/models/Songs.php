@@ -61,4 +61,10 @@ class Songs
 
         return $result;
     }
+
+    public function deleteSong($id_song) {
+        $query = "DELETE FROM songs WHERE id_song = :id_song";
+        $stm = $this->sql->prepare($query);
+        return $stm->execute([':id_song' => $id_song]);
+    }
 }
