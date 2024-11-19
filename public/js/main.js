@@ -5,6 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Iterar sobre cada elemento de audio
   audioElements.forEach((audioElement) => {
     const container = audioElement.closest('.audio-player');
+    const durationSpan = container.closest('tr').querySelector('.duration');
+
+    audioElement.addEventListener('loadedmetadata', () => {
+      const duration = formatTime(audioElement.duration);
+      durationSpan.textContent = duration;
+    });
+
     if (!container.querySelector('.custom-controls')) {
       const controls = document.createElement('div');
       controls.className = 'custom-controls d-flex align-items-center gap-2 mt-2';
