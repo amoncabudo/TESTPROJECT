@@ -24,7 +24,7 @@ function ctrlupdatesong($request, $response, $container) {
 
     // Manejo del archivo enviado
     if (!empty($_FILES['song']['tmp_name'])) {
-        $uploadDir = 'uploads/';
+        $uploadDir = 'uploads/songs/';
         $song_path = $uploadDir . basename($_FILES['song']['name']);
         if (!move_uploaded_file($_FILES['song']['tmp_name'], $song_path)) {
             // Redirigir si hay un error al subir el archivo

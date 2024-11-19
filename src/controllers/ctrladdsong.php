@@ -7,7 +7,7 @@ function ctrladdsong($request, $response, $container){
         $song_file = $request->get("FILES", "song");
 
         $unique_id = uniqid();
-        $upload_dir = "uploads/";
+        $upload_dir = "uploads/songs/";
         $file_name = $unique_id . "_" . basename($song_file['name']);
         $dir_file = $upload_dir . $file_name;
 

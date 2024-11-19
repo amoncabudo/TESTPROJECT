@@ -59,13 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Función para formatear segundos a mm:ss
 function formatTime(seconds) {
-  const minutes = Math.floor(seconds / 60); // Obtener los minutos
-  const secs = Math.floor(seconds % 60); // Obtener los segundos restantes
-  return `${minutes}:${secs < 10 ? "0" : ""}${secs}`; // Formato mm:ss
-}
-
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    }
 $(document).ready(function () {
     $("#editSongForm").on("submit", function (event) {
         event.preventDefault(); // Evita el envío normal del formulario
