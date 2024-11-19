@@ -39,7 +39,7 @@
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center justify-content-start gap-2 p-2 w-100">
                                         <!-- Contenedor del reproductor de audio -->
-                                        <div class="audio-player bg-white rounded-3 shadow-sm p-2 flex-grow-1">
+                                        <div class="audio-player rounded-3 shadow-sm p-2 flex-grow-1 bg-white">
                                             <audio id="myAudio" class="w-100">
                                                 <source src="<?= htmlspecialchars($song['song_path']) ?>" type="audio/mpeg">
                                                 Tu navegador no soporta el elemento de audio.

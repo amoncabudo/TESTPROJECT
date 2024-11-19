@@ -16,13 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const controls = document.createElement('div');
       controls.className = 'custom-controls d-flex align-items-center gap-2 mt-2';
       controls.innerHTML = `
-          <button class="btn btn-sm btn-primary play-btn">
+          <button class="btn btn-sm btn-success play-btn">
               <i class="bi bi-play-fill"></i>
           </button>
-          <button class="btn btn-sm btn-secondary pause-btn">
+          <button class="btn btn-sm btn-primary pause-btn">
               <i class="bi bi-pause-fill"></i>
           </button>
-          <button class="btn btn-sm btn-info mute-btn">
+          <button class="btn btn-sm btn-dark mute-btn">
               <i class="bi bi-volume-up-fill"></i>
           </button>
           <div class="progress flex-grow-1" style="height: 8px;">

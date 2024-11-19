@@ -17,7 +17,7 @@ audio {
 /* Estilo para la barra de progreso */
 audio::-webkit-media-controls-timeline,
 audio::-webkit-media-controls-timeline-container {
-  background-color: white !important;
+  background-color: rgb(162, 145, 145) !important;
 }
 
 /* Estilo para el panel de controles */
@@ -44,25 +44,6 @@ audio::-webkit-media-controls-time-remaining-display {
   color: var(--bs-gray-700);
   font-family: var(--bs-font-sans-serif);
 }
-
-/* Change the background color of the play button */
-.play-btn {
-  background-color: #28a745; /* Green */
-  color: white;
-}
-
-/* Change the background color of the pause button */
-.pause-btn {
-  background-color: #ffc107; /* Yellow */
-  color: white;
-}
-
-/* Change the background color of the mute button */
-.mute-btn {
-  background-color: #dc3545; /* Red */
-  color: white;
-}
-
 /* Custom styles for the Add Song form */
 form {
   max-width: 500px;
@@ -95,3 +76,4 @@ form .btn-primary:hover {
   background-color: #0056b3 !important; /* Even darker green for hover */
   border-color: #0056b3;
 }
+
