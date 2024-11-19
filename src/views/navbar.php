@@ -12,9 +12,12 @@
         <li class="nav-item">
           <a class="nav-link" href="/index.php?r=formsongs">Add Songs</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/index.php?r=songs">Songs</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index.php?r=songs">Songs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index.php?r=users">Users</a>
+          </li>
       </ul>
       <form class="d-flex ms-auto" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

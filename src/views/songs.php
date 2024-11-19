@@ -15,33 +15,31 @@
 
 <body>
 
-    <?php include_once("navbar.php"); ?>
-  <!-- Tabla de canciones -->
-  <div class="container">
+<div class="container">
         <div class="table-responsive mt-4 rounded">
             <table class="table table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col"><i class="bi bi-music-note"></i> Nombre</th>
-                        <th scope="col"><i class="bi bi-person"></i> Artista</th>
-                        <th scope="col"><i class="bi bi-clock"></i> Duración</th>
-                        <th scope="col"><i class="bi bi-controller"></i> Controles</th>
-                        <th scope="col"><i class="bi bi-sliders"></i> Config</th>
+                <thead class="table-light">
+                    <tr style="text-align: center;">
+                        <th scope="col"><i class="bi bi-music-note"></i> NAME</th>
+                        <th scope="col"><i class="bi bi-person"></i> ARTIST</th>
+                        <th scope="col"><i class="bi bi-clock"></i> DURATION</th>
+                        <th scope="col"><i class="bi bi-controller"></i> CONTROLS</th>
+                        <th scope="col"><i class="bi bi-sliders"></i> OPTIONS</th>
                     </tr>
                 </thead>
                 <?php if (!empty($songs)): ?>
                     <?php foreach ($songs as $song): ?>
                         <!-- id_song | song_name | artist | duration | song_path -->
                         <tbody>
-                            <tr data-song-id="<?= $song['id_song'] ?>">
-                                <td class="m-4"><i class="bi bi-music-note-beamed"></i> <?= $song['song_name'] ?></td>
-                                <td><i class="bi bi-person-circle"> <?= $song['artist'] ?></i></td>
-                                <td id="durationBtn"><i class="bi bi-clock"></i></td>
+                            <tr data-song-id="<?= $song['id_song'] ?>" style="align-items: center; text-align: center;">
+                                <td><?= $song['song_name'] ?></td>
+                                <td><?= $song['artist'] ?></td>
+                                <td id="durationBtn"> <span class="duration"></span></td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center justify-content-start gap-2 p-2 w-100">
                                         <!-- Contenedor del reproductor de audio -->
                                         <div class="audio-player bg-white rounded-3 shadow-sm p-2 flex-grow-1">
-                                            <audio id="myAudio" controls class="w-100">
+                                            <audio id="myAudio" class="w-100">
                                                 <source src="<?= htmlspecialchars($song['song_path']) ?>" type="audio/mpeg">
                                                 Tu navegador no soporta el elemento de audio.
                                             </audio>
