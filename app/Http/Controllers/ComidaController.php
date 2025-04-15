@@ -2,102 +2,103 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comida;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Comida;
 
 class ComidaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        Return Inertia::render('Index',[
-            'comidas' => Comida::all()
+        $comidas = Comida::all();
+        
+        return Inertia::render('Index', [
+            'comidas' => $comidas
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        Return Inertia::render('Create');
+        return Inertia::render('Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required|max:255',
-            'image' => 'required|mimes:jpeg,png,jpg,gif|max:2048'
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('comida', 'public');
-            $validate['image_path'] = $imagePath;
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
         }
 
-        Comida::create($validate);
+        Comida::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $imageName ?? null
+        ]);
 
-        return redirect()->route('comida.index');
+        return redirect()->route('comida.index')
+            ->with('success', 'Comida creada exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Comida $comida)
     {
-        Return Inertia::render('Show',[
+        return Inertia::render('Show', [
             'comida' => $comida
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Comida $comida)
     {
-        Return Inertia::render('Edit',[
+        return Inertia::render('Edit', [
             'comida' => $comida
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Comida $comida)
     {
-        $validate = $request->validate([
-            'name' => 'nullable|max:255',
-            'description' => 'nullable|max:255',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048'
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Remove image from validate array if no new image was uploaded
-        if (!$request->hasFile('image')) {
-            unset($validate['image']);
-        } else {
-            $imagePath = $request->file('image')->store('comida', 'public');
-            $validate['image'] = $imagePath;
+        if ($request->hasFile('image')) {
+            // Eliminar imagen anterior si existe
+            if ($comida->image && file_exists(public_path('images/' . $comida->image))) {
+                unlink(public_path('images/' . $comida->image));
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            
+            $comida->image = $imageName;
         }
 
-        $comida->update($validate);
+        $comida->name = $request->name;
+        $comida->description = $request->description;
+        $comida->save();
 
-        return redirect()->route('comida.index');
+        return redirect()->route('comida.index')
+            ->with('success', 'Comida actualizada exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Comida $comida)
     {
+        // Eliminar imagen si existe
+        if ($comida->image && file_exists(public_path('images/' . $comida->image))) {
+            unlink(public_path('images/' . $comida->image));
+        }
+
         $comida->delete();
 
-        return redirect()->route('comida.index');
+        return redirect()->route('comida.index')
+            ->with('success', 'Comida eliminada exitosamente.');
     }
 }
