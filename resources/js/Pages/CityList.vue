@@ -1,40 +1,46 @@
 <template>
     <Navbar/>
-    <div class="px-4 sm:px-6 lg:px-8">
-        <div class="text-center m-4">
-            <h1 class="font-bold text-xl mb-2">Lista de Ciudades</h1>
-            <button @click="CreateCity" class="bg-gray-400 py-2 px-4 rounded-lg">Crear Ciudad</button>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-xl font-medium text-gray-800">Lista de Ciudades</h1>
+            <button @click="CreateCity" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md text-sm transition-colors">
+                Crear Ciudad
+            </button>
         </div>
         
-        <div class="mb-4">
-            <input type="text" v-model="search" placeholder="Buscar por nombre o región"
-            class="w-full px-4 py-2 border border-black rounded-lg" />
+        <div class="mb-6">
+            <input 
+                type="text" 
+                v-model="search" 
+                placeholder="Buscar por nombre o región"
+                class="w-full px-4 py-2 border border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" aria-label="Buscador"
+            />
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full table-fixed">
+        <div class="overflow-x-auto bg-white rounded-lg shadow">
+            <table class="min-w-full divide-y divide-gray-200">
                 <thead>
-                    <tr class="bg-gray-400">
-                        <th class="text-left border border-black p-2">Nombre</th>
-                        <th class="text-left border border-black p-2">Descripción</th>
-                        <th class="text-left border border-black p-2">Región</th>
-                        <th class="text-left border border-black p-2">Imagen</th>
-                        <th class="text-left border border-black p-2">Acciones</th>
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Región</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagen</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="city in filteredCities" :key="city.id">
-                        <td class="text-left border border-black p-2">{{ city.name }}</td>
-                        <td class="text-left border border-black p-2">{{ city.description }}</td>
-                        <td class="text-left border border-black p-2">{{ city.region }}</td>
-                        <td class="text-left border border-black p-2">
-                            <img class="w-20" :src="`/storage/${city.image}`" :alt="city.name">
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="city in filteredCities" :key="city.id" class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ city.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ city.description }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ city.region }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <img class="h-16 w-16 object-cover rounded" :src="`/storage/${city.image}`" :alt="city.name">
                         </td>
-                        <td class="text-left border border-black p-2">
-                            <div class="flex gap-2">
-                                <Link :href="route('city.show', city.id)" class="text-green-600">Ver</Link>
-                                <Link :href="route('city.edit', city.id)" class="text-blue-600">Editar</Link>
-                                <button @click="DeleteCity(city.id)" class="text-red-600">Eliminar</button>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <div class="flex space-x-3">
+                                <Link :href="route('city.show', city.id)" class="text-green-600 hover:text-indigo-900">Ver</Link>
+                                <Link :href="route('city.edit', city.id)" class="text-blue-600 hover:text-blue-900">Editar</Link>
+                                <button @click="DeleteCity(city.id)" class="text-red-600 hover:text-red-900">Eliminar</button>
                             </div>
                         </td>
                     </tr>
@@ -42,8 +48,8 @@
             </table>
         </div>
 
-        <div v-if="props.cities && props.cities.length > 0" class="w-full max-w-4xl mx-auto mt-10">
-            <div class="relative overflow-hidden rounded-xl shadow-lg"
+        <div v-if="props.cities && props.cities.length > 0" class="mt-10 bg-white rounded-lg shadow overflow-hidden">
+            <div class="relative"
                  @mouseenter="stopAutoplay"
                  @mouseleave="startAutoplay">
                 <img
@@ -52,32 +58,32 @@
                     class="w-full h-64 object-cover transition-all duration-500"
                 />
 
-                <div class="absolute bottom-0 w-full bg-black bg-opacity-50 text-white p-4">
-                    <div class="text-center text-lg font-semibold">
+                <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white p-4">
+                    <div class="text-center text-lg font-medium">
                         {{ props.cities[currentIndex].name }} - {{ props.cities[currentIndex].region || 'Sin Región' }}
                     </div>
                 </div>
 
                 <button @click="prevImage"
-                    class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
+                    class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white w-8 h-8 flex items-center justify-center rounded-full transition-colors">
                     ‹
                 </button>
 
                 <button @click="nextImage"
-                    class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
+                    class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white w-8 h-8 flex items-center justify-center rounded-full transition-colors">
                     ›
                 </button>
             </div>
 
-            <div class="flex justify-center mt-4 space-x-2">
+            <div class="flex justify-center my-4 space-x-2">
                 <span
                     v-for="(city, index) in props.cities"
                     :key="city.id"
                     @click="goToImage(index)"
-                    class="w-3 h-3 rounded-full cursor-pointer transition-all duration-300"
+                    class="w-2 h-2 rounded-full cursor-pointer transition-all duration-300"
                     :class="{
-                        'bg-gray-800': index === currentIndex,
-                        'bg-gray-400': index !== currentIndex
+                        'bg-indigo-600': index === currentIndex,
+                        'bg-gray-300': index !== currentIndex
                     }"
                 />
             </div>
