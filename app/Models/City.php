@@ -10,5 +10,6 @@ class City extends Model
         'name',
         'description',
         'image',
+        'region',
     ];
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto p-4">
-        <h1 class="text-xl font-bold mb-4">Editar city</h1>
+        <h1 class="text-xl font-bold mb-4">Editar Ciudad</h1>
 
         <div class="bg-white p-4 border rounded">
             <form @submit.prevent="submit">
@@ -32,7 +32,7 @@
                         accept="image/*" />
                     <div class="p-2 text-left">
                         <img v-if="previewImage" class="w-20" :src="previewImage" :alt="form.name">
-                        <img v-else-if="cities.image" class="w-20" :src="`/storage/${cities.image}`" :alt="cities.name">
+                        <img v-else-if="props.city.image" class="w-20" :src="`/storage/${props.city.image}`" :alt="props.city.name">
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@ const form = useForm({
     description: '',
     region: '',
     image: null,
-    _method: 'put',
+    _method: 'put'
 });
 
 const handleImageChange = (event) => {
@@ -83,12 +83,12 @@ onMounted(() => {
     if (props.city) {
         form.name = props.city.name;
         form.description = props.city.description;
-        form.region = props.city.region; // Corregido: era Form.region
+        form.region = props.city.region;
         form.image = props.city.image;
     }
 });
 
 function submit() {
-    form.post(route('city.update', props.vity.id));
+    form.post(route('city.update', props.city.id));
 }
 </script>

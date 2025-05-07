@@ -34,6 +34,7 @@ class CityController extends Controller
         $validate = $request->validate([
             'name' => 'required|max:255',
             'description' => 'required|max:255',
+            'region' => 'required|max:255',
         ]);
 
         
@@ -63,7 +64,7 @@ class CityController extends Controller
     public function edit(City $city)
     {
         return Inertia::render('CityEdit',[
-            'cities' => $city
+            'city' => $city
         ]);
     }
 
@@ -75,6 +76,7 @@ class CityController extends Controller
         $validate = $request->validate([
             'name' => 'required|max:255',
             'description' => 'required|max:255',
+            'region' => 'required|max:255',
         ]);
 
         if ($request->hasFile('image')) {
