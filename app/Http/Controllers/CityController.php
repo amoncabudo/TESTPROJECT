@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class CityController extends Controller
 {
@@ -14,7 +15,10 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::with('region')->get(); // Cargar la relación 'region'
+        $cities = DB::table('cities')
+        ->join('regions', 'cities.region_id', '=', 'regions.id') // Unir las tablas
+        ->select('cities.*', 'regions.name as region_name') // Seleccionar columnas
+        ->get();
 
         return Inertia::render('CityList', [
             'cities' => $cities,
@@ -72,6 +76,7 @@ class CityController extends Controller
     public function edit(City $city)
     {
         $regions = Region::all(); 
+
         return Inertia::render('CityEdit', [
             'city' => $city,
             'regions' => $regions, 

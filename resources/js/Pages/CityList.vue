@@ -52,7 +52,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ city.name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ city.description }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ city.region ? city.region.name : 'Sin Región' }}
+                            {{ city.region_name || 'Sin Región' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <img class="h-16 w-16 object-cover rounded" :src="`/storage/${city.image}`"
@@ -72,43 +72,12 @@
                 </tbody>
             </table>
         </div>
-
-        <div v-if="props.cities && props.cities.length > 0" class="mt-10 bg-white rounded-lg shadow overflow-hidden">
-            <div class="relative" @mouseenter="stopAutoplay" @mouseleave="startAutoplay">
-                <img :src="getImageUrl(props.cities[currentIndex].image)" :alt="props.cities[currentIndex].name"
-                    class="w-full h-64 object-cover transition-all duration-500" />
-
-                <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white p-4">
-                    <div class="text-center text-lg font-medium">
-                        {{ props.cities[currentIndex].name }} - {{ props.cities[currentIndex].region ? props.cities[currentIndex].region.name : 'Sin Región' }}
-                    </div>
-                </div>
-
-                <button @click="prevImage"
-                    class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white w-8 h-8 flex items-center justify-center rounded-full transition-colors">
-                    ‹
-                </button>
-
-                <button @click="nextImage"
-                    class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white w-8 h-8 flex items-center justify-center rounded-full transition-colors">
-                    ›
-                </button>
-            </div>
-
-            <div class="flex justify-center my-4 space-x-2">
-                <span v-for="(city, index) in props.cities" :key="city.id" @click="goToImage(index)"
-                    class="w-2 h-2 rounded-full cursor-pointer transition-all duration-300" :class="{
-                        'bg-indigo-600': index === currentIndex,
-                        'bg-gray-300': index !== currentIndex
-                    }" />
-            </div>
-        </div>
     </div>
 </template>
 
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, defineProps, computed, onMounted, onUnmounted } from 'vue';
+import { ref, defineProps, computed } from 'vue';
 
 const props = defineProps({
     cities: Array
@@ -117,60 +86,20 @@ const props = defineProps({
 const search = ref('');
 const selectedRegion = ref('');
 const uniqueRegions = computed(() => {
-    const regions = props.cities.map(city => city.region ? city.region.name : 'Sin Región');
+    const regions = props.cities.map(city => city.region_name || 'Sin Región');
     return [...new Set(regions)];
 });
 
 const filteredCities = computed(() =>
     props.cities.filter(city => {
         const matchesSearch = city.name.toLowerCase().includes(search.value.toLowerCase()) ||
-            (city.region && city.region.name.toLowerCase().includes(search.value.toLowerCase()));
-        const matchesRegion = selectedRegion.value === '' || (city.region && city.region.name === selectedRegion.value);
+            (city.region_name && city.region_name.toLowerCase().includes(search.value.toLowerCase()));
+        const matchesRegion = selectedRegion.value === '' || city.region_name === selectedRegion.value;
         return matchesSearch && matchesRegion;
     })
 );
 
-const currentIndex = ref(0);
-const autoplayInterval = ref(null);
-
-const nextImage = () => {
-    if (props.cities.length > 0) {
-        currentIndex.value = (currentIndex.value + 1) % props.cities.length;
-    }
-};
-
-const prevImage = () => {
-    if (props.cities.length > 0) {
-        currentIndex.value = (currentIndex.value - 1 + props.cities.length) % props.cities.length;
-    }
-};
-
-const getImageUrl = (imagePath) => {
-    return `/storage/${imagePath}`;
-};
-
-const startAutoplay = () => {
-    if (!autoplayInterval.value) {
-        autoplayInterval.value = setInterval(nextImage, 3000);
-    }
-};
-
-const stopAutoplay = () => {
-    if (autoplayInterval.value) {
-        clearInterval(autoplayInterval.value);
-        autoplayInterval.value = null;
-    }
-};
-
 const CreateCity = () => {
     router.visit(route('city.create'));
 };
-
-onMounted(() => {
-    startAutoplay();
-});
-
-onUnmounted(() => {
-    stopAutoplay();
-});
 </script>
