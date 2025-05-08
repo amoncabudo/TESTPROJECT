@@ -10,10 +10,10 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripció</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Regió</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imatge</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Región</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagen</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -47,7 +47,7 @@
                 />
                 <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white p-4">
                     <div class="text-center text-lg font-medium">
-                        {{ cities.name }} - {{ cities.region }}
+                        {{ cities.name }} - {{ cities.region ? cities.region.name : 'Sin Región' }}
                     </div>
                     <div class="text-center text-sm mt-1 opacity-90">
                         {{ cities.description }}

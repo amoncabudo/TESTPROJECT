@@ -10,13 +10,21 @@
         </div>
 
         <div class="mb-6 flex items-center space-x-4">
-            <input type="text" v-model="search" placeholder="Buscar por nombre o región"
-                class="w-full px-4 py-2 border border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                aria-label="Buscador" />
+            <input
+                type="text"
+                v-model="search"
+                placeholder="Buscar por nombre o región"
+                class="flex-grow text-base px-6 py-3 border border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                aria-label="Buscador"
+            />
+
             <label for="regionSelect" class="sr-only">Filtrar por región</label>
-            <select id="regionSelect" v-model="selectedRegion"
-                class="px-8 py-2 border border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
-                <option value="" aria-label="filtro">Todas las regiones</option>
+            <select
+                id="regionSelect"
+                v-model="selectedRegion"
+                class="w-48 px-4 py-2 border border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+                <option value="">Todas las regiones</option>
                 <option v-for="region in uniqueRegions" :key="region" :value="region">
                     {{ region }}
                 </option>
@@ -52,11 +60,10 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             <div class="flex space-x-3">
-
                                 <Link :href="route('city.show', city.id)" class="text-green-800 hover:text-indigo-900">
-                                Ver</Link>
+                                    Ver</Link>
                                 <Link :href="route('city.edit', city.id)" class="text-blue-600 hover:text-blue-900">
-                                Editar</Link>
+                                    Editar</Link>
                                 <button @click="DeleteCity(city.id)"
                                     class="text-red-600 hover:text-red-900">Eliminar</button>
                             </div>
@@ -73,7 +80,7 @@
 
                 <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white p-4">
                     <div class="text-center text-lg font-medium">
-                        {{ props.cities[currentIndex].name }} - {{ props.cities[currentIndex].region || 'Sin Región' }}
+                        {{ props.cities[currentIndex].name }} - {{ props.cities[currentIndex].region ? props.cities[currentIndex].region.name : 'Sin Región' }}
                     </div>
                 </div>
 
@@ -107,47 +114,24 @@ const props = defineProps({
     cities: Array
 });
 
-const city = ref(props.cities);
-
-function CreateCity() {
-    router.visit('/city/create');
-}
-
-function DeleteCity(id) {
-    if (confirm('¿Estás seguro que deseas eliminar esta ciudad?')) {
-        router.delete(route('city.destroy', id), {
-            onSuccess: () => {
-                // Redirigir a la lista de ciudades después de eliminar
-                router.visit(route('city.index'));
-            },
-            onError: (errors) => {
-                console.error('Error al eliminar la ciudad:', errors);
-                alert('No se pudo eliminar la ciudad');
-            }
-        });
-    }
-}
-
-// Buscador
 const search = ref('');
 const selectedRegion = ref('');
 const uniqueRegions = computed(() => {
-    const regions = props.cities.map(city => city.region || 'Sin Región');
+    const regions = props.cities.map(city => city.region ? city.region.name : 'Sin Región');
     return [...new Set(regions)];
 });
 
 const filteredCities = computed(() =>
     props.cities.filter(city => {
         const matchesSearch = city.name.toLowerCase().includes(search.value.toLowerCase()) ||
-            (city.region && city.region.toLowerCase().includes(search.value.toLowerCase()));
-        const matchesRegion = selectedRegion.value === '' || city.region === selectedRegion.value;
+            (city.region && city.region.name.toLowerCase().includes(search.value.toLowerCase()));
+        const matchesRegion = selectedRegion.value === '' || (city.region && city.region.name === selectedRegion.value);
         return matchesSearch && matchesRegion;
     })
 );
-// Slider
+
 const currentIndex = ref(0);
 const autoplayInterval = ref(null);
-const isPaused = ref(false);
 
 const nextImage = () => {
     if (props.cities.length > 0) {
@@ -161,18 +145,12 @@ const prevImage = () => {
     }
 };
 
-const goToImage = (index) => {
-    if (props.cities.length > 0) {
-        currentIndex.value = index;
-    }
-};
-
 const getImageUrl = (imagePath) => {
     return `/storage/${imagePath}`;
 };
 
 const startAutoplay = () => {
-    if (!autoplayInterval.value && !isPaused.value) {
+    if (!autoplayInterval.value) {
         autoplayInterval.value = setInterval(nextImage, 3000);
     }
 };
@@ -184,6 +162,9 @@ const stopAutoplay = () => {
     }
 };
 
+const CreateCity = () => {
+    router.visit(route('city.create'));
+};
 
 onMounted(() => {
     startAutoplay();
