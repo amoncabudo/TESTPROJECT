@@ -43,7 +43,9 @@
                     <tr v-for="city in filteredCities" :key="city.id" class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ city.name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ city.description }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ city.region }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ city.region ? city.region.name : 'Sin Región' }}
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <img class="h-16 w-16 object-cover rounded" :src="`/storage/${city.image}`"
                                 :alt="city.name">

@@ -10,6 +10,11 @@ class City extends Model
         'name',
         'description',
         'image',
-        'region',
+        'region_id',
     ];
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
 }

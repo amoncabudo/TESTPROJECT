@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Region;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,8 +14,10 @@ class CityController extends Controller
      */
     public function index()
     {
+        $cities = City::with('region')->get(); // Cargar la relación 'region'
+
         return Inertia::render('CityList', [
-            'cities' => City::all(),
+            'cities' => $cities,
         ]);
     }
 
@@ -23,7 +26,10 @@ class CityController extends Controller
      */
     public function create()
     {
-        return Inertia::render('CityCreate');
+        $regions = Region::all(); // Obtener todas las regiones
+        return Inertia::render('CityCreate', [
+            'regions' => $regions, // Pasar las regiones al componente Vue
+        ]);
     }
 
     /**
@@ -31,21 +37,21 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required|max:255',
-            'region' => 'required|max:255',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'region_id' => 'required|exists:regions,id', // Validar que la región exista
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        
+        // Guardar la imagen si se proporciona
         if ($request->hasFile('image')) {
-            $image = $request->file('image')->store('city', 'public');
-            $validate['image'] = $image;
+            $validated['image'] = $request->file('image')->store('cities', 'public');
         }
 
-        City::create($validate);
+        City::create($validated);
 
-        return redirect()->route('city.index');
+        return redirect()->route('city.index')->with('success', 'Ciudad creada exitosamente.');
     }
 
     /**
@@ -53,6 +59,8 @@ class CityController extends Controller
      */
     public function show(City $city)
     {
+        $city->load('region');
+        
         return Inertia::render('CityShow',[
             'cities' => $city
         ]);
@@ -63,8 +71,10 @@ class CityController extends Controller
      */
     public function edit(City $city)
     {
-        return Inertia::render('CityEdit',[
-            'city' => $city
+        $regions = Region::all(); 
+        return Inertia::render('CityEdit', [
+            'city' => $city,
+            'regions' => $regions, 
         ]);
     }
 
@@ -73,20 +83,21 @@ class CityController extends Controller
      */
     public function update(Request $request, City $city)
     {
-        $validate = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required|max:255',
-            'region' => 'required|max:255',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'region_id' => 'required|exists:regions,id', 
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // Guardar la imagen si se proporciona
         if ($request->hasFile('image')) {
-            $image = $request->file('image')->store('city', 'public');
-            $validate['image'] = $image;
+            $validated['image'] = $request->file('image')->store('cities', 'public');
         }
 
-        $city->update($validate);
+        $city->update($validated);
 
-        return redirect()->route('city.index');
+        return redirect()->route('city.index')->with('success', 'Ciudad actualizada exitosamente.');
     }
 
     /**

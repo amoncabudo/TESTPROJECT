@@ -16,13 +16,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="region" class="block mb-1">Región/Continente:</label>
-                    <select id="region" v-model="form.region" class="w-full border p-2 rounded" required>
+                    <select id="region" v-model="form.region_id" class="w-full border p-2 rounded" required>
                         <option value="">Selecciona una región</option>
-                        <option value="Europa">Europa</option>
-                        <option value="Asia">Asia</option>
-                        <option value="América">América</option>
-                        <option value="África">África</option>
-                        <option value="Oceanía">Oceanía</option>
+                        <option v-for="region in regions" :key="region.id" :value="region.id">
+                            {{ region.name }}
+                        </option>
                     </select>
                 </div>
 
@@ -57,6 +55,10 @@ const props = defineProps({
     city: {
         type: Object,
         required: true
+    },
+    regions: {
+        type: Array,
+        required: true
     }
 });
 
@@ -65,9 +67,18 @@ const previewImage = ref(null);
 const form = useForm({
     name: '',
     description: '',
-    region: '',
+    region_id: '', // Cambiar a region_id
     image: null,
     _method: 'put'
+});
+
+onMounted(() => {
+    if (props.city) {
+        form.name = props.city.name;
+        form.description = props.city.description;
+        form.region_id = props.city.region_id; // Usar region_id
+        form.image = props.city.image;
+    }
 });
 
 const handleImageChange = (event) => {
@@ -79,16 +90,14 @@ const handleImageChange = (event) => {
     }
 };
 
-onMounted(() => {
-    if (props.city) {
-        form.name = props.city.name;
-        form.description = props.city.description;
-        form.region = props.city.region;
-        form.image = props.city.image;
-    }
-});
-
 function submit() {
-    form.post(route('city.update', props.city.id));
+    form.post(route('city.update', props.city.id), {
+        onSuccess: () => {
+            console.log('Ciudad actualizada correctamente');
+        },
+        onError: (errors) => {
+            console.error('Errores:', errors);
+        }
+    });
 }
 </script>

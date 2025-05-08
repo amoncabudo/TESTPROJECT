@@ -20,7 +20,7 @@
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ cities.name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cities.description }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cities.region }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cities.region ? cities.region.name : 'Sin Región' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <img class="h-16 w-16 object-cover rounded" :src="`/storage/${cities.image}`" :alt="cities.name">
                         </td>
@@ -47,7 +47,7 @@
                 />
                 <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white p-4">
                     <div class="text-center text-lg font-medium">
-                        {{ cities.name }} - {{ cities.region || 'Sin Región' }}
+                        {{ cities.name }} - {{ cities.region }}
                     </div>
                     <div class="text-center text-sm mt-1 opacity-90">
                         {{ cities.description }}

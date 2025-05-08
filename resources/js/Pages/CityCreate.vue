@@ -13,15 +13,14 @@
                     <input type="text" id="description" v-model="form.description" class="w-full border p-2 rounded"
                         required />
                 </div>
+
                 <div class="mb-3">
                     <label for="region" class="block mb-1">Región/Continente:</label>
-                    <select id="region" v-model="form.region" class="w-full border p-2 rounded" required>
+                    <select id="region" v-model="form.region_id" class="w-full border p-2 rounded" required>
                         <option value="">Selecciona una región</option>
-                        <option value="Europa">Europa</option>
-                        <option value="Asia">Asia</option>
-                        <option value="América">América</option>
-                        <option value="África">África</option>
-                        <option value="Oceanía">Oceanía</option>
+                        <option v-for="region in regions" :key="region.id" :value="region.id">
+                            {{ region.name }}
+                        </option>
                     </select>
                 </div>
 
@@ -36,7 +35,7 @@
 
                 <div class="flex justify-between mt-4">
                     <Link :href="route('city.index')" class="bg-gray-300 px-3 py-1 rounded">
-                    Cancelar
+                        Cancelar
                     </Link>
                     <button type="submit" class="bg-green-500 hover:bg-green-700 text-black px-3 py-1 rounded">
                         Guardar
@@ -49,7 +48,11 @@
 
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
+
+const props = defineProps({
+    regions: Array, // Recibir las regiones desde el backend
+});
 
 const previewImage = ref(null);
 
@@ -57,7 +60,7 @@ const form = useForm({
     name: '',
     description: '',
     image: '',
-    region: '',
+    region_id: '', // Cambiar a region_id para que coincida con la base de datos
 });
 
 const handleImageChange = (event) => {
