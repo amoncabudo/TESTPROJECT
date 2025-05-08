@@ -112,12 +112,18 @@ function CreateCity() {
 }
 
 function DeleteCity(id) {
-    router.delete(route('city.destroy', id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            city.value = city.value.filter(city => city.id !== id);
-        }
-    });
+    if (confirm('¿Estás seguro que deseas eliminar esta ciudad?')) {
+        router.delete(route('city.destroy', id), {
+            onSuccess: () => {
+                // Redirigir a la lista de ciudades después de eliminar
+                router.visit(route('city.index'));
+            },
+            onError: (errors) => {
+                console.error('Error al eliminar la ciudad:', errors);
+                alert('No se pudo eliminar la ciudad');
+            }
+        });
+    }
 }
 
 // Buscador
