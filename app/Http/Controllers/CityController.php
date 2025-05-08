@@ -15,10 +15,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = DB::table('cities')
-        ->join('regions', 'cities.region_id', '=', 'regions.id') // Unir las tablas
-        ->select('cities.*', 'regions.name as region_name') // Seleccionar columnas
-        ->get();
+        $cities = City::with('region')->get(); // Cargar la relación 'region'
 
         return Inertia::render('CityList', [
             'cities' => $cities,

@@ -52,7 +52,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ city.name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ city.description }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ city.region_name || 'Sin Región' }}
+                            {{ city.region ? city.region.name : 'Sin Región' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <img class="h-16 w-16 object-cover rounded" :src="`/storage/${city.image}`"
@@ -86,15 +86,15 @@ const props = defineProps({
 const search = ref('');
 const selectedRegion = ref('');
 const uniqueRegions = computed(() => {
-    const regions = props.cities.map(city => city.region_name || 'Sin Región');
+    const regions = props.cities.map(city => city.region ? city.region.name : 'Sin Región');
     return [...new Set(regions)];
 });
 
 const filteredCities = computed(() =>
     props.cities.filter(city => {
         const matchesSearch = city.name.toLowerCase().includes(search.value.toLowerCase()) ||
-            (city.region_name && city.region_name.toLowerCase().includes(search.value.toLowerCase()));
-        const matchesRegion = selectedRegion.value === '' || city.region_name === selectedRegion.value;
+            (city.region && city.region.name.toLowerCase().includes(search.value.toLowerCase()));
+        const matchesRegion = selectedRegion.value === '' || (city.region && city.region.name === selectedRegion.value);
         return matchesSearch && matchesRegion;
     })
 );
